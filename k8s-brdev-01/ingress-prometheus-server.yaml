@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: prometheus-server
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  tls:
+  - hosts:
+      - prometheus.k8s-brdev-01.trinet.internal
+  rules:
+  - host: "prometheus.k8s-brdev-01.trinet.internal"
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: prometheus-prometheus
+            port:
+              number: 9090

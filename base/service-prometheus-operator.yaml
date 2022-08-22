@@ -1,0 +1,26 @@
+---
+apiVersion: "v1"
+kind: "Service"
+metadata:
+  namespace: "prometheus-op"
+  annotations: {}
+  name: "prometheus-operator"
+  labels:
+    app: "prometheus-operator"
+    app.kubernetes.io/name: "prometheus"
+    release: "prometheus"
+    heritage: "Tiller"
+    chart: "prometheus-operator-9.3.0"
+    app.kubernetes.io/component: "deployment.prometheus-operator"
+spec:
+  externalIPs: []
+  loadBalancerSourceRanges: []
+  type: "ClusterIP"
+  selector:
+    app: "prometheus-operator"
+    release: "prometheus"
+    app.kubernetes.io/component: "deployment.prometheus-operator"
+  ports:
+  - name: "http"
+    port: 8080
+    targetPort: "http"

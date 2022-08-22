@@ -1,0 +1,4 @@
+resources:
+- ../base/
+- ../base/aws
+- ingress-prometheus-server.yaml

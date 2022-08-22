@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: prometheus-autoscaler
+    app.kubernetes.io/name: prometheus
+    jobLabel: autoscaler
+    release: prometheus
+  name: prometheus-autoscaler
+  namespace: kube-system
+spec:
+  ports:
+  - name: http-metrics
+    port: 8085
+    protocol: TCP
+    targetPort: 8085
+  selector:
+    app: cluster-autoscaler
+  sessionAffinity: None
+  type: ClusterIP

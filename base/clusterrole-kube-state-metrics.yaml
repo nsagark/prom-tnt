@@ -1,0 +1,259 @@
+---
+apiVersion: "rbac.authorization.k8s.io/v1"
+kind: "ClusterRole"
+rules:
+- apiGroups:
+  - "certificates.k8s.io"
+  nonResourceURLs: []
+  resourceNames: []
+  resources:
+  - "certificatesigningrequests"
+  verbs:
+  - "list"
+  - "watch"
+- apiGroups:
+  - ""
+  nonResourceURLs: []
+  resourceNames: []
+  resources:
+  - "configmaps"
+  verbs:
+  - "list"
+  - "watch"
+- apiGroups:
+  - "batch"
+  nonResourceURLs: []
+  resourceNames: []
+  resources:
+  - "cronjobs"
+  verbs:
+  - "list"
+  - "watch"
+- apiGroups:
+  - "extensions"
+  - "apps"
+  nonResourceURLs: []
+  resourceNames: []
+  resources:
+  - "daemonsets"
+  verbs:
+  - "list"
+  - "watch"
+- apiGroups:
+  - "extensions"
+  - "apps"
+  nonResourceURLs: []
+  resourceNames: []
+  resources:
+  - "deployments"
+  verbs:
+  - "list"
+  - "watch"
+- apiGroups:
+  - ""
+  nonResourceURLs: []
+  resourceNames: []
+  resources:
+  - "endpoints"
+  verbs:
+  - "list"
+  - "watch"
+- apiGroups:
+  - "autoscaling"
+  nonResourceURLs: []
+  resourceNames: []
+  resources:
+  - "horizontalpodautoscalers"
+  verbs:
+  - "list"
+  - "watch"
+- apiGroups:
+  - "extensions"
+  - "networking.k8s.io"
+  nonResourceURLs: []
+  resourceNames: []
+  resources:
+  - "ingresses"
+  verbs:
+  - "list"
+  - "watch"
+- apiGroups:
+  - "batch"
+  nonResourceURLs: []
+  resourceNames: []
+  resources:
+  - "jobs"
+  verbs:
+  - "list"
+  - "watch"
+- apiGroups:
+  - ""
+  nonResourceURLs: []
+  resourceNames: []
+  resources:
+  - "limitranges"
+  verbs:
+  - "list"
+  - "watch"
+- apiGroups:
+  - "admissionregistration.k8s.io"
+  nonResourceURLs: []
+  resourceNames: []
+  resources:
+  - "mutatingwebhookconfigurations"
+  verbs:
+  - "list"
+  - "watch"
+- apiGroups:
+  - ""
+  nonResourceURLs: []
+  resourceNames: []
+  resources:
+  - "namespaces"
+  verbs:
+  - "list"
+  - "watch"
+- apiGroups:
+  - "networking.k8s.io"
+  nonResourceURLs: []
+  resourceNames: []
+  resources:
+  - "networkpolicies"
+  verbs:
+  - "list"
+  - "watch"
+- apiGroups:
+  - ""
+  nonResourceURLs: []
+  resourceNames: []
+  resources:
+  - "nodes"
+  verbs:
+  - "list"
+  - "watch"
+- apiGroups:
+  - ""
+  nonResourceURLs: []
+  resourceNames: []
+  resources:
+  - "persistentvolumeclaims"
+  verbs:
+  - "list"
+  - "watch"
+- apiGroups:
+  - ""
+  nonResourceURLs: []
+  resourceNames: []
+  resources:
+  - "persistentvolumes"
+  verbs:
+  - "list"
+  - "watch"
+- apiGroups:
+  - "policy"
+  nonResourceURLs: []
+  resourceNames: []
+  resources:
+  - "poddisruptionbudgets"
+  verbs:
+  - "list"
+  - "watch"
+- apiGroups:
+  - ""
+  nonResourceURLs: []
+  resourceNames: []
+  resources:
+  - "pods"
+  verbs:
+  - "list"
+  - "watch"
+- apiGroups:
+  - "extensions"
+  - "apps"
+  nonResourceURLs: []
+  resourceNames: []
+  resources:
+  - "replicasets"
+  verbs:
+  - "list"
+  - "watch"
+- apiGroups:
+  - ""
+  nonResourceURLs: []
+  resourceNames: []
+  resources:
+  - "replicationcontrollers"
+  verbs:
+  - "list"
+  - "watch"
+- apiGroups:
+  - ""
+  nonResourceURLs: []
+  resourceNames: []
+  resources:
+  - "resourcequotas"
+  verbs:
+  - "list"
+  - "watch"
+- apiGroups:
+  - ""
+  nonResourceURLs: []
+  resourceNames: []
+  resources:
+  - "secrets"
+  verbs:
+  - "list"
+  - "watch"
+- apiGroups:
+  - ""
+  nonResourceURLs: []
+  resourceNames: []
+  resources:
+  - "services"
+  verbs:
+  - "list"
+  - "watch"
+- apiGroups:
+  - "apps"
+  nonResourceURLs: []
+  resourceNames: []
+  resources:
+  - "statefulsets"
+  verbs:
+  - "list"
+  - "watch"
+- apiGroups:
+  - "storage.k8s.io"
+  nonResourceURLs: []
+  resourceNames: []
+  resources:
+  - "storageclasses"
+  verbs:
+  - "list"
+  - "watch"
+- apiGroups:
+  - "admissionregistration.k8s.io"
+  nonResourceURLs: []
+  resourceNames: []
+  resources:
+  - "validatingwebhookconfigurations"
+  verbs:
+  - "list"
+  - "watch"
+- apiGroups:
+  - "storage.k8s.io"
+  nonResourceURLs: []
+  resourceNames: []
+  resources:
+  - "volumeattachments"
+  verbs:
+  - "list"
+  - "watch"
+metadata:
+  annotations: {}
+  name: "kube-state-metrics"
+  labels:
+    helm.sh/chart: "kube-state-metrics-2.8.10"
+    app.kubernetes.io/managed-by: "Tiller"
+    app.kubernetes.io/name: "kube-state-metrics"
+    app.kubernetes.io/instance: "prometheus"

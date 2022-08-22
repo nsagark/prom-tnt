@@ -1,0 +1,20 @@
+---
+metadata:
+  namespace: "prometheus-op"
+  name: "prometheus-kube-state-metrics"
+  labels:
+    app: "prometheus-kube-state-metrics"
+    release: "prometheus"
+    heritage: "Tiller"
+    chart: "prometheus-operator-9.3.0"
+apiVersion: "monitoring.coreos.com/v1"
+kind: "ServiceMonitor"
+spec:
+  jobLabel: "app.kubernetes.io/name"
+  endpoints:
+  - port: "http"
+    honorLabels: true
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: "kube-state-metrics"
+      app.kubernetes.io/instance: "prometheus"

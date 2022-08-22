@@ -1,0 +1,28 @@
+---
+metadata:
+  namespace: "prometheus-op"
+  name: "prometheus-apiserver"
+  labels:
+    app: "prometheus-apiserver"
+    release: "prometheus"
+    heritage: "Tiller"
+    chart: "prometheus-operator-9.3.0"
+apiVersion: "monitoring.coreos.com/v1"
+kind: "ServiceMonitor"
+spec:
+  jobLabel: "component"
+  endpoints:
+  - scheme: "https"
+    port: "https"
+    bearerTokenFile: "/var/run/secrets/kubernetes.io/serviceaccount/token"
+    tlsConfig:
+      caFile: "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+      insecureSkipVerify: false
+      serverName: "kubernetes"
+  namespaceSelector:
+    matchNames:
+    - "default"
+  selector:
+    matchLabels:
+      component: "apiserver"
+      provider: "kubernetes"

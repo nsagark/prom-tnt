@@ -1,0 +1,62 @@
+resources:
+- ../base/
+- ingress-prometheus-server.yaml
+patches:
+- target:
+    group: apps
+    version: v1
+    kind: Deployment
+    name: prometheus-operator
+  patch: |-
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: "prometheus-operator"
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: nirmata.io/cluster.role
+                operator: In
+                values:
+                - control-plane
+- target:
+    group: apps
+    version: v1
+    kind: Deployment
+    name: kube-state-metrics
+  patch: |-
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: "kube-state-metrics"
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: nirmata.io/cluster.role
+                operator: In
+                values:
+                - control-plane
+- target:
+    group: monitoring.coreos.com
+    version: v1
+    kind: Prometheus
+    name: prometheus-prometheus
+  patch: |-
+    apiVersion: apps/v1
+    kind: Prometheus
+    metadata:
+      name: "prometheus-prometheus"
+    spec:
+      storage:
+        volumeClaimTemplate:
+          spec:
+            storageClassName: nfs-client
+            resources:
+              requests:
+                storage: 10Gi

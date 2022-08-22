@@ -1,0 +1,59 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+secretGenerator:
+- name: additional-scrape-configs
+  files:
+  - prometheus-additional.yaml
+generatorOptions:
+  disableNameSuffixHash: true
+resources:
+- clusterrole-kube-state-metrics.yaml
+- clusterrole-prometheus-operator.yaml
+- clusterrole-prometheus-prometheus.yaml
+- clusterrolebinding-kube-state-metrics.yaml
+- clusterrolebinding-prometheus-operator.yaml
+- clusterrolebinding-prometheus-prometheus.yaml
+- customresourcedefinition-alertmanagers.monitoring.coreos.com.yaml
+- customresourcedefinition-podmonitors.monitoring.coreos.com.yaml
+- customresourcedefinition-prometheuses.monitoring.coreos.com.yaml
+- customresourcedefinition-prometheusrules.monitoring.coreos.com.yaml
+- customresourcedefinition-servicemonitors.monitoring.coreos.com.yaml
+- customresourcedefinition-thanosrulers.monitoring.coreos.com.yaml
+- daemonset-node-exporter.yaml
+- deployment-kube-state-metrics.yaml
+- deployment-prometheus-operator.yaml
+- prometheus-prometheus-prometheus.yaml
+- service-kube-state-metrics.yaml
+- service-node-exporter.yaml
+- service-prometheus-coredns.yaml
+- service-prometheus-kube-controller-manager.yaml
+- service-prometheus-kube-etcd.yaml
+- service-prometheus-kube-proxy.yaml
+- service-prometheus-kube-scheduler.yaml
+- service-prometheus-operator.yaml
+- service-prometheus-prometheus.yaml
+- serviceaccount-kube-state-metrics.yaml
+- serviceaccount-node-exporter.yaml
+- serviceaccount-prometheus-operator.yaml
+- serviceaccount-prometheus-prometheus.yaml
+- servicemonitor-prometheus-apiserver.yaml
+- servicemonitor-prometheus-coredns.yaml
+- servicemonitor-prometheus-kube-controller-manager.yaml
+- servicemonitor-prometheus-kube-etcd.yaml
+- servicemonitor-prometheus-kube-proxy.yaml
+- servicemonitor-prometheus-kube-scheduler.yaml
+- servicemonitor-prometheus-kube-state-metrics.yaml
+- servicemonitor-prometheus-kubelet.yaml
+- servicemonitor-prometheus-node-exporter.yaml
+- servicemonitor-prometheus-operator.yaml
+- servicemonitor-prometheus-prometheus.yaml
+- service-prometheus-velero.yaml
+- servicemonitor-prometheus-velero.yaml
+- customresourcedefinition-probe.monitoring.coreos.com.yaml
+- configmap-prometheus-blackbox-exporter.yaml
+- rolebinding-prometheus-blackbox-exporter.yaml
+- deployment-prometheus-blackbox-exporter.yaml
+- service-prometheus-blackbox-exporter.yaml
+- serviceaccount-prometheus-blackbox-exporter.yaml
+- role-prometheus-blackbox-exporter.yaml
+- regcred.yaml

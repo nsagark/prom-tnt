@@ -1,0 +1,23 @@
+---
+metadata:
+  namespace: "prometheus-op"
+  name: "prometheus-kube-scheduler"
+  labels:
+    app: "prometheus-kube-scheduler"
+    release: "prometheus"
+    heritage: "Tiller"
+    chart: "prometheus-operator-9.3.0"
+apiVersion: "monitoring.coreos.com/v1"
+kind: "ServiceMonitor"
+spec:
+  jobLabel: "jobLabel"
+  endpoints:
+  - port: "http-metrics"
+    bearerTokenFile: "/var/run/secrets/kubernetes.io/serviceaccount/token"
+  namespaceSelector:
+    matchNames:
+    - "kube-system"
+  selector:
+    matchLabels:
+      app: "prometheus-kube-scheduler"
+      release: "prometheus"

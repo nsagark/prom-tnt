@@ -1,0 +1,50 @@
+resources:
+- ../base/
+- ../base/aws
+- ingress-prometheus-server.yaml
+secretGenerator:
+- name: additional-scrape-configs
+  behavior: replace
+  files:
+  - prometheus-additional.yaml
+generatorOptions:
+  disableNameSuffixHash: true
+patches:
+- target:
+    group: monitoring.coreos.com
+    version: v1
+    kind: Prometheus
+    name: prometheus-prometheus
+  patch: |-
+    apiVersion: apps/v1
+    kind: Prometheus
+    metadata:
+      name: "prometheus-prometheus"
+    spec:
+      storage:
+        volumeClaimTemplate:
+          spec:
+            storageClassName: ebs-enc
+            resources:
+              requests:
+                storage: 200Gi
+- target:
+    group: monitoring.coreos.com
+    version: v1
+    kind: Prometheus
+    name: prometheus-prometheus
+  patch: |-
+    apiVersion: apps/v1
+    kind: Prometheus
+    metadata:
+      name: "prometheus-prometheus"
+    spec:
+      containers:
+      - name: prometheus 
+        resources:
+          limits:
+            cpu: "4"
+            memory: "16Gi"
+          requests:
+            cpu: "4"
+            memory: "16Gi"

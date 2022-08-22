@@ -1,0 +1,20 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app: prometheus-velero
+    release: prometheus
+  name: prometheus-velero
+  namespace: prometheus-op
+spec:
+  endpoints:
+  - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+    port: http-metrics
+  jobLabel: jobLabel
+  namespaceSelector:
+    matchNames:
+    - velero
+  selector:
+    matchLabels:
+      app: prometheus-velero
+      release: prometheus

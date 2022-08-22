@@ -1,0 +1,100 @@
+---
+kind: "Deployment"
+apiVersion: "apps/v1"
+metadata:
+  namespace: "prometheus-op"
+  annotations: {}
+  name: "kube-state-metrics"
+  labels:
+    helm.sh/chart: "kube-state-metrics-2.8.10"
+    app.kubernetes.io/managed-by: "Tiller"
+    app.kubernetes.io/name: "kube-state-metrics"
+    app.kubernetes.io/instance: "prometheus"
+    app.kubernetes.io/component: "deployment.kube-state-metrics"
+spec:
+  replicas: 1
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: "kube-state-metrics"
+      app.kubernetes.io/component: "deployment.kube-state-metrics"
+    matchExpressions: []
+  strategy:
+    type: "RollingUpdate"
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      annotations: {}
+      labels:
+        app.kubernetes.io/name: "kube-state-metrics"
+        app.kubernetes.io/instance: "prometheus"
+        app.kubernetes.io/component: "deployment.kube-state-metrics"
+    spec:
+      tolerations:
+        - effect: NoSchedule
+          operator: Exists
+      terminationGracePeriodSeconds: 30
+      nodeSelector: {}
+      serviceAccountName: "kube-state-metrics"
+      hostNetwork: false
+      containers:
+      - name: "kube-state-metrics"
+        image: "quay.io/coreos/kube-state-metrics:v1.9.7"
+        command: []
+        args:
+        - "--collectors=certificatesigningrequests"
+        - "--collectors=configmaps"
+        - "--collectors=cronjobs"
+        - "--collectors=daemonsets"
+        - "--collectors=deployments"
+        - "--collectors=endpoints"
+        - "--collectors=horizontalpodautoscalers"
+        - "--collectors=ingresses"
+        - "--collectors=jobs"
+        - "--collectors=limitranges"
+        - "--collectors=mutatingwebhookconfigurations"
+        - "--collectors=namespaces"
+        - "--collectors=networkpolicies"
+        - "--collectors=nodes"
+        - "--collectors=persistentvolumeclaims"
+        - "--collectors=persistentvolumes"
+        - "--collectors=poddisruptionbudgets"
+        - "--collectors=pods"
+        - "--collectors=replicasets"
+        - "--collectors=replicationcontrollers"
+        - "--collectors=resourcequotas"
+        - "--collectors=secrets"
+        - "--collectors=services"
+        - "--collectors=statefulsets"
+        - "--collectors=storageclasses"
+        - "--collectors=validatingwebhookconfigurations"
+        - "--collectors=volumeattachments"
+        imagePullPolicy: "IfNotPresent"
+        ports:
+        - containerPort: 8080
+          protocol: "TCP"
+        livenessProbe:
+          initialDelaySeconds: 5
+          timeoutSeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 3
+          httpGet:
+            path: "/healthz"
+            port: 8080
+        readinessProbe:
+          initialDelaySeconds: 5
+          timeoutSeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 3
+          httpGet:
+            path: "/"
+            port: 8080
+      securityContext:
+        runAsUser: 65534
+        fsGroup: 65534
+        runAsGroup: 65534
+        supplementalGroups: []

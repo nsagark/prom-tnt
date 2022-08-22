@@ -1,0 +1,23 @@
+resources:
+- ../base/
+- ../base/aws
+- ingress-prometheus-server.yaml
+patches:
+- target:
+    group: monitoring.coreos.com
+    version: v1
+    kind: Prometheus
+    name: prometheus-prometheus
+  patch: |-
+    apiVersion: apps/v1
+    kind: Prometheus
+    metadata:
+      name: "prometheus-prometheus"
+    spec:
+      storage:
+        volumeClaimTemplate:
+          spec:
+            storageClassName: ebs-enc
+            resources:
+              requests:
+                storage: 40Gi

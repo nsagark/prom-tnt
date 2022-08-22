@@ -1,0 +1,26 @@
+---
+apiVersion: "v1"
+kind: "Service"
+metadata:
+  namespace: "kube-system"
+  annotations: {}
+  name: "prometheus-kube-etcd"
+  labels:
+    app: "prometheus-kube-etcd"
+    jobLabel: "kube-etcd"
+    app.kubernetes.io/name: "prometheus"
+    release: "prometheus"
+    heritage: "Tiller"
+    chart: "prometheus-operator-9.3.0"
+spec:
+  clusterIP: "None"
+  externalIPs: []
+  loadBalancerSourceRanges: []
+  type: "ClusterIP"
+  selector:
+    component: "etcd"
+  ports:
+  - name: "http-metrics"
+    port: 2379
+    protocol: "TCP"
+    targetPort: 2379

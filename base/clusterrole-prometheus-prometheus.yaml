@@ -1,0 +1,55 @@
+---
+apiVersion: "rbac.authorization.k8s.io/v1"
+kind: "ClusterRole"
+rules:
+- apiGroups:
+  - ""
+  nonResourceURLs: []
+  resourceNames: []
+  resources:
+  - "nodes/metrics"
+  verbs:
+  - "get"
+  - "list"
+  - "watch"
+- apiGroups:
+  - ""
+  nonResourceURLs: []
+  resourceNames: []
+  resources:
+  - "nodes"
+  - "nodes/proxy"
+  - "services"
+  - "endpoints"
+  - "pods"
+  verbs:
+  - "get"
+  - "list"
+  - "watch"
+- apiGroups:
+  - "extensions"
+  - "networking.k8s.io"
+  nonResourceURLs: []
+  resourceNames: []
+  resources:
+  - "ingresses"
+  verbs:
+  - "get"
+  - "list"
+  - "watch"
+- apiGroups: []
+  nonResourceURLs:
+  - "/metrics"
+  resourceNames: []
+  resources: []
+  verbs:
+  - "get"
+metadata:
+  annotations: {}
+  name: "prometheus-prometheus"
+  labels:
+    app: "prometheus-prometheus"
+    heritage: "Tiller"
+    app.kubernetes.io/name: "prometheus"
+    chart: "prometheus-operator-9.3.0"
+    release: "prometheus"

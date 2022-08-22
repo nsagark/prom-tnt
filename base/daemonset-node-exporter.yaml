@@ -1,0 +1,105 @@
+---
+apiVersion: "apps/v1"
+kind: "DaemonSet"
+metadata:
+  namespace: "prometheus-op"
+  annotations: {}
+  name: "node-exporter"
+  labels:
+    app: "prometheus-node-exporter"
+    jobLabel: "node-exporter"
+    app.kubernetes.io/name: "prometheus"
+    release: "prometheus"
+    heritage: "Tiller"
+    chart: "prometheus-node-exporter-1.10.0"
+    app.kubernetes.io/component: "daemonset.node-exporter"
+spec:
+  minReadySeconds: 0
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: "prometheus-node-exporter"
+      release: "prometheus"
+      app.kubernetes.io/component: "daemonset.node-exporter"
+    matchExpressions: []
+  template:
+    metadata:
+      annotations: {}
+      labels:
+        app: "prometheus-node-exporter"
+        jobLabel: "node-exporter"
+        app.kubernetes.io/name: "prometheus-allinone"
+        release: "prometheus"
+        heritage: "Tiller"
+        chart: "prometheus-node-exporter-1.10.0"
+        app.kubernetes.io/component: "daemonset.node-exporter"
+    spec:
+      terminationGracePeriodSeconds: 30
+      nodeSelector: {}
+      serviceAccountName: "node-exporter"
+      hostNetwork: true
+      hostPID: true
+      volumes:
+      - name: "proc"
+        hostPath:
+          path: "/proc"
+      - name: "sys"
+        hostPath:
+          path: "/sys"
+      containers:
+      - name: "node-exporter"
+        image: "quay.io/prometheus/node-exporter:v1.3.1"
+        command: []
+        args:
+        - "--path.procfs=/host/proc"
+        - "--path.sysfs=/host/sys"
+        - "--web.listen-address=$(HOST_IP):9100"
+        - "--collector.filesystem.mount-points-exclude=^/(dev|proc|sys|var/lib/docker/.+)($|/)"
+        - "--collector.filesystem.fs-types-exclude=^(autofs|binfmt_misc|cgroup|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|mqueue|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|sysfs|tracefs)$"
+        imagePullPolicy: "IfNotPresent"
+        ports:
+        - name: "metrics"
+          containerPort: 9100
+          protocol: "TCP"
+        env:
+        - name: "HOST_IP"
+          value: "0.0.0.0"
+        volumeMounts:
+        - name: "proc"
+          readOnly: true
+          mountPath: "/host/proc"
+        - name: "sys"
+          readOnly: true
+          mountPath: "/host/sys"
+        livenessProbe:
+          timeoutSeconds: 1
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 3
+          httpGet:
+            path: "/"
+            port: 9100
+        readinessProbe:
+          timeoutSeconds: 1
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 3
+          httpGet:
+            path: "/"
+            port: 9100
+        resources:
+          limits: {}
+          requests: {}
+      securityContext:
+        runAsUser: 65534
+        runAsNonRoot: true
+        fsGroup: 65534
+        runAsGroup: 65534
+        supplementalGroups: []
+      tolerations:
+      - operator: "Exists"
+        effect: "NoSchedule"
+  updateStrategy:
+    type: "RollingUpdate"
+    rollingUpdate:
+      maxUnavailable: 1

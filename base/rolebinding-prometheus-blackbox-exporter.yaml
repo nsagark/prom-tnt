@@ -1,0 +1,19 @@
+---
+apiVersion: "rbac.authorization.k8s.io/v1"
+kind: "RoleBinding"
+metadata:
+  annotations: {}
+  name: "prometheus-blackbox-exporter"
+  labels:
+    helm.sh/chart: "prometheus-blackbox-exporter-5.8.1"
+    app.kubernetes.io/managed-by: "Helm"
+    app.kubernetes.io/name: "prometheus-blackbox-exporter"
+    app.kubernetes.io/instance: "bb-exp"
+    app.kubernetes.io/version: "0.20.0"
+roleRef:
+  apiGroup: "rbac.authorization.k8s.io"
+  kind: "Role"
+  name: "prometheus-blackbox-exporter"
+subjects:
+- kind: "ServiceAccount"
+  name: "prometheus-blackbox-exporter"

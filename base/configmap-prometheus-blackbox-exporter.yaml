@@ -1,0 +1,40 @@
+---
+kind: "ConfigMap"
+apiVersion: "v1"
+data:
+  blackbox.yaml: |
+    modules:
+      http_2xx:
+        http:
+          follow_redirects: true
+          preferred_ip_protocol: ip4
+          valid_http_versions:
+          - HTTP/1.1
+          - HTTP/2.0
+        prober: http
+        timeout: 5s
+      http_k8s:
+        prober: http
+        timeout: 2s
+        http:
+          preferred_ip_protocol: ip4
+          follow_redirects: true
+          bearer_token: /var/run/secrets/kubernetes.io/serviceaccount/token
+          tls_config:
+            ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+          valid_status_codes:
+            - 200
+            - 204
+      icmp:
+        prober: icmp
+        icmp:
+          preferred_ip_protocol: ip4
+metadata:
+  annotations: {}
+  name: "prometheus-blackbox-exporter"
+  labels:
+    helm.sh/chart: "prometheus-blackbox-exporter-5.8.1"
+    app.kubernetes.io/managed-by: "Helm"
+    app.kubernetes.io/name: "prometheus-blackbox-exporter"
+    app.kubernetes.io/instance: "bb-exp"
+    app.kubernetes.io/version: "0.20.0"

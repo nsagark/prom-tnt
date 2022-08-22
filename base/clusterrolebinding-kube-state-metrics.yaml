@@ -1,0 +1,19 @@
+---
+apiVersion: "rbac.authorization.k8s.io/v1"
+kind: "ClusterRoleBinding"
+metadata:
+  annotations: {}
+  name: "kube-state-metrics"
+  labels:
+    helm.sh/chart: "kube-state-metrics-2.8.10"
+    app.kubernetes.io/managed-by: "Tiller"
+    app.kubernetes.io/name: "kube-state-metrics"
+    app.kubernetes.io/instance: "prometheus"
+subjects:
+- kind: "ServiceAccount"
+  name: "kube-state-metrics"
+  namespace: "prometheus-op"
+roleRef:
+  apiGroup: "rbac.authorization.k8s.io"
+  kind: "ClusterRole"
+  name: "kube-state-metrics"

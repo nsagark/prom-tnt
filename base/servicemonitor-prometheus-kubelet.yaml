@@ -1,0 +1,67 @@
+---
+metadata:
+  namespace: "prometheus-op"
+  name: "prometheus-kubelet"
+  labels:
+    app: "prometheus-kubelet"
+    release: "prometheus"
+    heritage: "Tiller"
+    chart: "prometheus-operator-9.3.0"
+apiVersion: "monitoring.coreos.com/v1"
+kind: "ServiceMonitor"
+spec:
+  jobLabel: "k8s-app"
+  endpoints:
+  - relabelings:
+    - sourceLabels:
+      - "__metrics_path__"
+      targetLabel: "metrics_path"
+    scheme: "https"
+    port: "https-metrics"
+    bearerTokenFile: "/var/run/secrets/kubernetes.io/serviceaccount/token"
+    tlsConfig:
+      caFile: "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+      insecureSkipVerify: true
+    honorLabels: true
+  - path: "/metrics/cadvisor"
+    relabelings:
+    - sourceLabels:
+      - "__metrics_path__"
+      targetLabel: "metrics_path"
+    scheme: "https"
+    port: "https-metrics"
+    bearerTokenFile: "/var/run/secrets/kubernetes.io/serviceaccount/token"
+    honorLabels: true
+    tlsConfig:
+      caFile: "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+      insecureSkipVerify: true
+  - path: "/metrics/probes"
+    relabelings:
+    - sourceLabels:
+      - "__metrics_path__"
+      targetLabel: "metrics_path"
+    scheme: "https"
+    port: "https-metrics"
+    bearerTokenFile: "/var/run/secrets/kubernetes.io/serviceaccount/token"
+    honorLabels: true
+    tlsConfig:
+      caFile: "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+      insecureSkipVerify: true
+  - path: "/metrics/resource/v1alpha1"
+    relabelings:
+    - sourceLabels:
+      - "__metrics_path__"
+      targetLabel: "metrics_path"
+    scheme: "https"
+    port: "https-metrics"
+    bearerTokenFile: "/var/run/secrets/kubernetes.io/serviceaccount/token"
+    honorLabels: true
+    tlsConfig:
+      caFile: "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+      insecureSkipVerify: true
+  namespaceSelector:
+    matchNames:
+    - "kube-system"
+  selector:
+    matchLabels:
+      k8s-app: "kubelet"

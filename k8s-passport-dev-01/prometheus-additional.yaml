@@ -1,0 +1,96 @@
+- job_name: "blackbox-kubernetes-services-http"
+  metrics_path: /probe
+  params:
+    module: [http_2xx]
+  kubernetes_sd_configs:
+  - role: service
+  relabel_configs:
+    - source_labels: [__meta_kubernetes_service_annotation_kubenetes_io_blackbox_http]
+      action: keep
+      regex: true      
+    - source_labels: [__address__]
+      target_label: __param_target
+    - target_label: __address__
+      replacement:  prometheus-blackbox-exporter:9115
+    - source_labels: [__param_target]
+      target_label: instance
+    - action: labelmap
+      regex: __meta_kubernetes_service_label_(.+)
+    - source_labels: [__meta_kubernetes_namespace]
+      target_label: kubernetes_namespace
+    - source_labels: [__meta_kubernetes_service_name]
+      target_label: kubernetes_service_name
+- job_name: "blackbox-kubernetes-services-http_k8s"
+  metrics_path: /probe
+  params:
+    module: [http_k8s]
+  kubernetes_sd_configs:
+  - role: service
+  relabel_configs:
+    - source_labels: [__meta_kubernetes_service_annotation_kubenetes_io_blackbox_http_k8s]
+      action: keep
+      regex: true
+    - source_labels: [__address__]
+      target_label: __param_target
+    - target_label: __address__
+      replacement:  prometheus-blackbox-exporter:9115
+    - source_labels: [__param_target]
+      target_label: instance
+    - action: labelmap
+      regex: __meta_kubernetes_service_label_(.+)
+    - source_labels: [__meta_kubernetes_namespace]
+      target_label: kubernetes_namespace
+    - source_labels: [__meta_kubernetes_service_name]
+      target_label: kubernetes_service_name
+- job_name: "blackbox-kubernetes-pods-http"
+  metrics_path: /probe
+  params:
+    module: [http_2xx]
+  kubernetes_sd_configs:
+  - role: pod
+  relabel_configs:
+    - source_labels: [__meta_kubernetes_pod_annotation_kubenetes_io_blackbox_http]
+      action: keep
+      regex: true
+    - source_labels: [__address__]
+      target_label: __param_target
+    - target_label: __address__
+      replacement:  prometheus-blackbox-exporter:9115
+    - source_labels: [__param_target]
+      replacement: ${1}/health
+      target_label: instance
+    - action: labelmap
+      regex: __meta_kubernetes_pod_label_(.+)
+    - source_labels: [__meta_kubernetes_namespace]
+      target_label: kubernetes_namespace
+    - source_labels: [__meta_kubernetes_pod_name]
+      target_label: kubernetes_pod_name
+- job_name: "blackbox-kubernetes-pods-icmp"
+  metrics_path: /probe
+  params:
+    module: [icmp]
+  kubernetes_sd_configs:
+  - role: pod
+  relabel_configs:
+    - source_labels: [__meta_kubernetes_pod_annotation_kubenetes_io_blackbox_icmp]
+      action: keep
+      regex: true
+    - source_labels: [__address__]
+      target_label: __param_target
+    - target_label: __address__
+      replacement:  prometheus-blackbox-exporter:9115
+    - source_labels: [__param_target]
+      replacement: ${1}/health
+      target_label: instance
+    - action: labelmap
+      regex: __meta_kubernetes_pod_label_(.+)
+    - source_labels: [__meta_kubernetes_namespace]
+      target_label: kubernetes_namespace
+    - source_labels: [__meta_kubernetes_pod_name]
+      target_label: kubernetes_pod_name
+- job_name: "purge"
+  kubernetes_sd_configs:
+  metric_relabel_configs:
+  - source_labels: [__name__]
+    regex: '(apiserver_request_duration_seconds_bucket|container_tasks_state|container_memory_failures_total)'
+    action: drop

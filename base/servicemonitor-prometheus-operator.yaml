@@ -1,0 +1,22 @@
+---
+metadata:
+  namespace: "prometheus-op"
+  name: "prometheus-operator"
+  labels:
+    app: "prometheus-operator"
+    release: "prometheus"
+    heritage: "Tiller"
+    chart: "prometheus-operator-9.3.0"
+apiVersion: "monitoring.coreos.com/v1"
+kind: "ServiceMonitor"
+spec:
+  endpoints:
+  - port: "http"
+    honorLabels: true
+  namespaceSelector:
+    matchNames:
+    - "prometheus-op"
+  selector:
+    matchLabels:
+      app: "prometheus-operator"
+      release: "prometheus"

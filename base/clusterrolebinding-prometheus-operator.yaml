@@ -1,0 +1,20 @@
+---
+apiVersion: "rbac.authorization.k8s.io/v1"
+kind: "ClusterRoleBinding"
+metadata:
+  annotations: {}
+  name: "prometheus-operator"
+  labels:
+    app: "prometheus-operator"
+    heritage: "Tiller"
+    app.kubernetes.io/name: "prometheus"
+    chart: "prometheus-operator-9.3.0"
+    release: "prometheus"
+subjects:
+- kind: "ServiceAccount"
+  name: "prometheus-operator"
+  namespace: "prometheus-op"
+roleRef:
+  apiGroup: "rbac.authorization.k8s.io"
+  kind: "ClusterRole"
+  name: "prometheus-operator"
